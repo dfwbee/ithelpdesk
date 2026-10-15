@@ -1,0 +1,153 @@
+/* Styles added in Phase 5: analytics charts and the knowledge base */
+
+/* ---------- Charts ---------- */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.chart-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.bars {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 12px;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr) 36px;
+  align-items: center;
+  gap: 12px;
+  min-height: 36px;
+  padding: 0 6px;
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.bar-row:hover {
+  background: rgba(39, 41, 37, 0.04);
+}
+
+.bar-label {
+  font-size: 13px;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.bar-track {
+  display: block;
+  height: 10px;
+  background: var(--panel);
+  border-radius: 0 5px 5px 0;
+  overflow: hidden;
+}
+
+.bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent-strong);
+  border-radius: 0 4px 4px 0;
+  transition: width 0.3s ease;
+}
+
+.bar-value {
+  font-size: 13px;
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Knowledge base ---------- */
+.kb-filters {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.kb-count {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 4px 0 12px;
+}
+
+.kb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.kb-article {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.kb-article:hover {
+  box-shadow: var(--shadow-lift);
+}
+
+.kb-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.kb-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.kb-summary {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 4px 0 14px;
+}
+
+.kb-body {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.kb-steps {
+  padding-left: 20px;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.kb-escalate {
+  font-size: 14px;
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 16px 0 12px;
+}
+
+@media (max-width: 900px) {
+  .charts-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .kb-filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bar-row {
+    grid-template-columns: 88px minmax(0, 1fr) 30px;
+    gap: 8px;
+  }
+}

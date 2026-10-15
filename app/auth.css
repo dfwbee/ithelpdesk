@@ -1,0 +1,126 @@
+/* Login, signup, setup notice and role badges */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 430px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-lift);
+  padding: 34px;
+  animation: fade-in 0.25s var(--ease);
+}
+
+/* The brand sits on a light card here, so its text must be dark */
+.auth-brand .brand-name {
+  color: var(--text);
+}
+
+.auth-tag {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 6px 0 26px;
+}
+
+.auth-title {
+  font-size: 24px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.auth-sub {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 6px 0 22px;
+}
+
+.auth-card .field {
+  margin-bottom: 14px;
+}
+
+.auth-submit {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.auth-switch {
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 22px;
+}
+
+.auth-switch a {
+  color: var(--accent-deep);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.auth-note {
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.alert-error {
+  background: var(--red-bg);
+  color: var(--red-text);
+  border: 1px solid #e8bdb3;
+}
+
+/* ---------- Setup notice ---------- */
+.setup-steps {
+  font-size: 14px;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.setup-steps code {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 12px;
+  background: var(--panel);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.setup-steps pre {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 12px;
+  background: var(--panel);
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-top: 8px;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* ---------- Role badges (also used for knowledge base categories) ---------- */
+.badge-admin {
+  background-color: var(--charcoal);
+  color: var(--on-dark);
+}
+
+.badge-user {
+  background-color: var(--beige);
+  color: #33342f;
+}
+
+@media (max-width: 800px) {
+  .auth-card {
+    padding: 26px 20px;
+  }
+}

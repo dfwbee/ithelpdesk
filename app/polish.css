@@ -1,0 +1,660 @@
+/* =====================================================================
+   Polish layer: atmosphere, motion and hover effects.
+   Loaded last in layout.js, so it sits on top of globals.css.
+   Delete this file (and its import) to get the plain redesign back.
+   ===================================================================== */
+
+:root {
+  --glow: rgba(200, 117, 90, 0.35);
+  --ease-spring: cubic-bezier(0.3, 1.25, 0.4, 1);
+  /* Want a photo in the banner? Add it here, for example:
+     --hero-photo: url("/office.jpg");  (put office.jpg in the public folder) */
+}
+
+body {
+  font-feature-settings: "cv11";
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------
+   Page background: slow-drifting contour lines
+   --------------------------------------------------------------------- */
+.app-shell {
+  position: relative;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.backdrop svg {
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  left: -10%;
+  top: -10%;
+  animation: drift 70s ease-in-out infinite alternate;
+}
+
+.backdrop path {
+  fill: none;
+  stroke: #cbbda6;
+  stroke-width: 1;
+  opacity: 0.5;
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(-1.5%, -1%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(1.5%, 1.2%, 0) scale(1.04);
+  }
+}
+
+.main {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------------------------------------------------------------------
+   Page entrance: one short, staggered reveal when a page opens
+   --------------------------------------------------------------------- */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.main > div > * {
+  animation: rise 0.55s var(--ease) both;
+}
+
+.main > div > *:nth-child(2) {
+  animation-delay: 0.07s;
+}
+.main > div > *:nth-child(3) {
+  animation-delay: 0.14s;
+}
+.main > div > *:nth-child(4) {
+  animation-delay: 0.21s;
+}
+.main > div > *:nth-child(n + 5) {
+  animation-delay: 0.28s;
+}
+
+/* ---------------------------------------------------------------------
+   Sidebar: glow, dot grid and a highlight that slides between pages
+   --------------------------------------------------------------------- */
+.sidebar {
+  z-index: 2;
+  background: radial-gradient(
+      280px 260px at 0% 100%,
+      rgba(200, 117, 90, 0.26),
+      transparent 70%
+    ),
+    var(--charcoal);
+}
+
+.sidebar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    rgba(255, 254, 250, 0.09) 1px,
+    transparent 1px
+  );
+  background-size: 18px 18px;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 55%);
+  mask-image: linear-gradient(180deg, #000 0%, transparent 55%);
+}
+
+.sidebar > * {
+  position: relative;
+  z-index: 1;
+}
+
+.brand-logo {
+  box-shadow: inset 0 0 0 1px rgba(255, 254, 250, 0.18),
+    0 8px 20px -6px var(--glow);
+  transition: transform 0.35s var(--ease-spring), box-shadow 0.3s var(--ease);
+}
+
+.brand:hover .brand-logo {
+  transform: rotate(-8deg) scale(1.06);
+  box-shadow: inset 0 0 0 1px rgba(255, 254, 250, 0.25),
+    0 10px 26px -4px rgba(200, 117, 90, 0.65);
+}
+
+.nav {
+  position: relative;
+}
+
+.nav-link {
+  position: relative;
+  z-index: 1;
+  height: 42px;
+}
+
+.nav-link.active {
+  background: transparent;
+}
+
+.nav-link .icon {
+  transition: color 0.18s var(--ease), transform 0.3s var(--ease-spring);
+}
+
+.nav-link:hover .icon {
+  transform: scale(1.12) rotate(-4deg);
+}
+
+.nav-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--accent);
+  box-shadow: 0 10px 24px -8px var(--glow), inset 0 1px 0 rgba(255, 254, 250, 0.25);
+  transform: translateY(calc(var(--i, 0) * 45px));
+  transition: transform 0.42s var(--ease-spring);
+}
+
+.sidebar-user .avatar {
+  box-shadow: 0 0 0 3px rgba(200, 117, 90, 0.25);
+}
+
+/* ---------------------------------------------------------------------
+   Buttons: a soft light sweep across primary buttons
+   --------------------------------------------------------------------- */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 254, 250, 0.3) 50%,
+    transparent 65%
+  );
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+
+.btn-primary:hover:not(:disabled)::after {
+  transform: translateX(120%);
+  transition: transform 0.65s var(--ease);
+}
+
+.btn-ghost-dark {
+  background: rgba(255, 254, 250, 0.07);
+  border-color: rgba(255, 254, 250, 0.25);
+  color: var(--on-dark);
+}
+
+.btn-ghost-dark:hover:not(:disabled) {
+  background: rgba(255, 254, 250, 0.16);
+  border-color: rgba(255, 254, 250, 0.45);
+  transform: translateY(-1px);
+}
+
+.hero :focus-visible,
+.auth-aside :focus-visible {
+  outline-color: var(--on-dark);
+}
+
+/* ---------------------------------------------------------------------
+   Hero banner (dashboard and user home)
+   --------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  align-items: center;
+  min-height: 260px;
+  margin-bottom: 28px;
+  padding: 44px 48px;
+  border-radius: 22px;
+  color: var(--on-dark);
+  background-color: var(--charcoal);
+  background-image: var(--hero-photo, none),
+    radial-gradient(
+      620px 360px at 88% 110%,
+      rgba(200, 117, 90, 0.32),
+      transparent 70%
+    );
+  background-size: cover;
+  box-shadow: 0 28px 50px -28px rgba(39, 41, 37, 0.7),
+    inset 0 0 0 1px rgba(255, 254, 250, 0.06);
+}
+
+.hero-compact {
+  min-height: 200px;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    380px circle at var(--mx, 70%) var(--my, 0%),
+    rgba(255, 254, 250, 0.09),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+
+.hero:hover::after {
+  opacity: 1;
+}
+
+.hero-copy {
+  max-width: 520px;
+}
+
+.hero-title {
+  font-size: clamp(30px, 4.2vw, 46px);
+  font-weight: 600;
+  letter-spacing: -0.038em;
+  line-height: 1.06;
+}
+
+.hero-sub {
+  margin-top: 14px;
+  max-width: 46ch;
+  font-size: 16px;
+  color: var(--on-dark-soft);
+}
+
+.hero-sub strong {
+  color: var(--on-dark);
+  font-weight: 600;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.hero .signal-art {
+  position: absolute;
+  z-index: -1;
+  right: -70px;
+  top: 50%;
+  width: 430px;
+  height: 430px;
+  transform: translateY(-50%);
+}
+
+/* ---------- Radar artwork ---------- */
+.signal-art .tick {
+  stroke: rgba(255, 254, 250, 0.28);
+  stroke-width: 1;
+}
+
+.signal-art .tick-long {
+  stroke: rgba(255, 254, 250, 0.55);
+  stroke-width: 1.5;
+}
+
+.signal-art .orbit {
+  fill: none;
+  stroke: rgba(255, 254, 250, 0.16);
+  stroke-width: 1;
+}
+
+.signal-art .crosshair {
+  stroke: rgba(255, 254, 250, 0.1);
+  stroke-width: 1;
+  stroke-dasharray: 2 6;
+}
+
+.signal-art .ping {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  opacity: 0;
+  animation: ping 6s ease-out infinite;
+}
+
+.signal-art .ping-2 {
+  animation-delay: 2s;
+}
+
+.signal-art .ping-3 {
+  animation-delay: 4s;
+}
+
+@keyframes ping {
+  0% {
+    transform: scale(0.15);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.signal-art .sweep {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: spin 14s linear infinite;
+}
+
+.signal-art .sweep path {
+  fill: rgba(200, 117, 90, 0.22);
+}
+
+.signal-art .sweep line {
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.signal-art .blip {
+  fill: var(--accent);
+  animation: blink 4.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.signal-art .core {
+  fill: var(--on-dark);
+}
+
+/* ---------------------------------------------------------------------
+   Cards: cursor-following glow, a growing accent mark, a gentle lift
+   --------------------------------------------------------------------- */
+.stat-card,
+.chart-panel,
+.kb-article {
+  position: relative;
+}
+
+.stat-card::after,
+.chart-panel::after,
+.kb-article::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(200, 117, 90, 0.13),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+
+.stat-card:hover::after,
+.chart-panel:hover::after,
+.kb-article:hover::after {
+  opacity: 1;
+}
+
+.stat-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 20px;
+  width: 26px;
+  height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: var(--accent);
+  transition: width 0.4s var(--ease-spring);
+}
+
+.stat-card:hover::before {
+  width: 72px;
+}
+
+.stat-icon {
+  transition: transform 0.35s var(--ease-spring);
+}
+
+.stat-card:hover .stat-icon {
+  transform: rotate(-8deg) scale(1.1);
+}
+
+/* ---------------------------------------------------------------------
+   Tickets table: animated underline on the hovered row
+   --------------------------------------------------------------------- */
+.ticket-link {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 1px;
+  transition: color 0.15s var(--ease), background-size 0.3s var(--ease);
+}
+
+.ticket-link:hover {
+  text-decoration: none;
+  background-size: 100% 1px;
+}
+
+tbody tr:hover .ticket-title .ticket-link {
+  color: var(--accent-deep);
+  background-size: 100% 1px;
+}
+
+tbody tr:hover td {
+  background-color: #faf4ea;
+}
+
+.badge {
+  transition: background-color 0.25s ease, color 0.25s ease,
+    transform 0.2s var(--ease);
+}
+
+tbody tr:hover .badge-overdue {
+  transform: scale(1.05);
+}
+
+/* ---------------------------------------------------------------------
+   Sign in and sign up: split screen
+   --------------------------------------------------------------------- */
+.auth-page.auth-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: stretch;
+  padding: 0;
+  position: relative;
+}
+
+.auth-aside {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  padding: 48px 56px;
+  color: var(--on-dark);
+  background-color: var(--charcoal);
+  background-image: var(--hero-photo, none),
+    radial-gradient(
+      700px 420px at 100% 100%,
+      rgba(200, 117, 90, 0.3),
+      transparent 70%
+    );
+  background-size: cover;
+}
+
+.auth-aside .brand-name {
+  color: var(--on-dark);
+}
+
+.auth-aside .signal-art {
+  position: absolute;
+  z-index: -1;
+  width: 560px;
+  height: 560px;
+  right: -140px;
+  top: 8%;
+}
+
+.auth-aside-copy {
+  max-width: 460px;
+}
+
+.auth-aside-title {
+  font-size: clamp(32px, 3.6vw, 46px);
+  font-weight: 600;
+  letter-spacing: -0.038em;
+  line-height: 1.06;
+}
+
+.auth-aside-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 22px;
+  font-size: 15px;
+  color: var(--on-dark-soft);
+}
+
+.auth-aside-list li {
+  padding-left: 22px;
+  position: relative;
+}
+
+.auth-aside-list li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.62em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(200, 117, 90, 0.22);
+}
+
+.auth-aside-note {
+  margin-top: 28px;
+  font-size: 12px;
+  color: var(--on-dark-soft);
+}
+
+.auth-main {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+}
+
+.auth-main .auth-card {
+  position: relative;
+  z-index: 1;
+}
+
+.auth-split .backdrop {
+  left: 52%;
+}
+
+/* ---------------------------------------------------------------------
+   Smaller screens
+   --------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .hero {
+    padding: 32px 24px;
+    min-height: 0;
+  }
+
+  .hero .signal-art {
+    width: 320px;
+    height: 320px;
+    right: -110px;
+    opacity: 0.55;
+  }
+
+  .auth-page.auth-split {
+    display: block;
+  }
+
+  .auth-aside {
+    display: none;
+  }
+
+  .auth-main {
+    min-height: 100vh;
+  }
+
+  .auth-split .backdrop {
+    left: 0;
+  }
+
+  .nav-indicator {
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop svg,
+  .signal-art .sweep,
+  .signal-art .ping,
+  .signal-art .blip,
+  .main > div > * {
+    animation: none !important;
+  }
+
+  .signal-art .ping {
+    opacity: 0;
+  }
+
+  .nav-indicator {
+    transition: none;
+  }
+}

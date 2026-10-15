@@ -1,0 +1,263 @@
+/* Phase 7: equipment tracking (list, detail page, "My equipment") */
+
+/* ---------- Badges ---------- */
+.badge-asset-in-stock {
+  background-color: var(--sage-bg);
+  color: var(--sage-text);
+}
+
+.badge-asset-assigned {
+  background-color: var(--beige);
+  color: #33342f;
+}
+
+.badge-asset-in-repair {
+  background-color: var(--amber-bg);
+  color: var(--amber-text);
+}
+
+.badge-asset-retired {
+  background-color: var(--grey-bg);
+  color: var(--grey-text);
+}
+
+.badge-warranty-ok {
+  background-color: var(--sage-bg);
+  color: var(--sage-text);
+}
+
+.badge-warranty-soon {
+  background-color: var(--amber-bg);
+  color: var(--amber-text);
+}
+
+.badge-warranty-expired {
+  background-color: var(--red-bg);
+  color: var(--red-text);
+}
+
+.badge-warranty-none {
+  background-color: var(--grey-bg);
+  color: var(--grey-text);
+}
+
+/* Small asset tag shown beside a ticket title */
+.asset-chip {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 1px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border-strong);
+  background: var(--card);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  vertical-align: 1px;
+  white-space: nowrap;
+}
+
+/* ---------- Table helpers ---------- */
+.cell-sub {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* ---------- Holder card ---------- */
+.holder-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 14px 0 18px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #faf6ee;
+  border: 1px solid var(--border);
+}
+
+.holder-avatar {
+  width: 48px;
+  height: 48px;
+  font-size: 16px;
+}
+
+.holder-name {
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.holder-meta {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.return-field {
+  margin-bottom: 0;
+}
+
+/* ---------- Timelines (maintenance and custody history) ---------- */
+.timeline {
+  list-style: none;
+  margin-top: 18px;
+  padding-left: 18px;
+  border-left: 2px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.timeline li {
+  position: relative;
+}
+
+.timeline li::before {
+  content: "";
+  position: absolute;
+  left: -25px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--accent);
+}
+
+.timeline-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.timeline-date {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.timeline p {
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+.inline-form {
+  margin-top: 14px;
+  padding-bottom: 6px;
+}
+
+.inline-form .form-actions {
+  margin-top: 14px;
+}
+
+/* ---------- My equipment (regular users) ---------- */
+.equipment-panel {
+  margin-bottom: 28px;
+}
+
+.equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.equipment-card {
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: #faf6ee;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.equipment-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lift);
+}
+
+.equipment-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.equipment-tag {
+  margin-top: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+
+.equipment-model {
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.equipment-facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 14px;
+  margin: 14px 0 16px;
+  font-size: 13px;
+}
+
+.equipment-facts dt {
+  color: var(--muted);
+}
+
+.equipment-facts dd {
+  text-align: right;
+}
+
+.equipment-report {
+  margin-top: auto;
+}
+
+/* ---------- Dashboard strip ---------- */
+.equipment-strip {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.equipment-strip:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lift);
+}
+
+.equipment-strip-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: var(--muted);
+  min-width: 0;
+}
+
+.equipment-strip-text strong {
+  color: var(--text);
+  font-weight: 650;
+}
+
+@media (max-width: 520px) {
+  .equipment-strip .link-action {
+    display: none;
+  }
+}
