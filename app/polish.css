@@ -103,8 +103,15 @@ body {
 /* ---------------------------------------------------------------------
    Sidebar: glow, dot grid and a highlight that slides between pages
    --------------------------------------------------------------------- */
+/* z-index only on desktop: on phones the sidebar is a slide-in menu that must
+   sit above the dark overlay (z-index 50 in globals.css), so we must not override it. */
+@media (min-width: 901px) {
+  .sidebar {
+    z-index: 2;
+  }
+}
+
 .sidebar {
-  z-index: 2;
   background: radial-gradient(
       280px 260px at 0% 100%,
       rgba(200, 117, 90, 0.26),
