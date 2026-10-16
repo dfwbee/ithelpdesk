@@ -102,6 +102,39 @@ const paths = {
       <path d="M12 10v4M12 17h.01" />
     </>
   ),
+  bell: (
+    <>
+      <path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15L6 16Z" />
+      <path d="M10 21a2 2 0 0 0 4 0" />
+    </>
+  ),
+  building: (
+    <>
+      <rect x="5" y="3" width="14" height="18" rx="1.5" />
+      <path d="M9 8h.01M13 8h.01M9 12h.01M13 12h.01M10 21v-4h4v4" />
+    </>
+  ),
+  paperclip: (
+    <path d="m20 11-8.2 8.2a5 5 0 0 1-7-7l8.6-8.6a3.4 3.4 0 0 1 4.8 4.8l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4L15 7.6" />
+  ),
+  qr: (
+    <>
+      <rect x="4" y="4" width="6" height="6" rx="1" />
+      <rect x="14" y="4" width="6" height="6" rx="1" />
+      <rect x="4" y="14" width="6" height="6" rx="1" />
+      <path d="M14 14h2v2h-2zM18 14h2M14 18h2M18 18h2v2" />
+    </>
+  ),
+  send: <path d="M21 3 10 14M21 3l-7 18-4-7-7-4 18-7Z" />,
+  printer: (
+    <>
+      <path d="M7 9V3h10v6M7 17H5a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-2" />
+      <rect x="7" y="14" width="10" height="7" rx="1" />
+    </>
+  ),
+  trash: (
+    <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" />
+  ),
 };
 
 export default function Icon({ name, size = 18 }) {

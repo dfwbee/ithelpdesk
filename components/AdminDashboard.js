@@ -28,6 +28,14 @@ export default function AdminDashboard() {
   const resolved = tickets.filter((t) => t.status === "Resolved").length;
   const overdue = tickets.filter((t) => isOverdue(t)).length;
 
+  // Tickets handed to me that are still waiting, oldest first (most urgent)
+  const myQueue = tickets
+    .filter((t) => user && t.assignedTo === user.id && t.status !== "Resolved")
+    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+  const unassigned = tickets.filter(
+    (t) => !t.assignedTo && t.status !== "Resolved"
+  ).length;
+
   const recent = [...tickets]
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 8);
@@ -158,6 +166,32 @@ export default function AdminDashboard() {
             </span>
             <span className="link-action">Open equipment</span>
           </Link>
+
+          <div className="panel">
+            <div className="panel-header">
+              <h2 className="panel-title">
+                My queue
+                {myQueue.length > 0 && (
+                  <span className="count-pill">{myQueue.length}</span>
+                )}
+              </h2>
+              <div className="panel-links">
+                {unassigned > 0 && (
+                  <Link href="/tickets?assigned=unassigned" className="link-action">
+                    {unassigned} unassigned
+                  </Link>
+                )}
+                <Link href="/tickets?assigned=mine" className="link-action">
+                  View all
+                </Link>
+              </div>
+            </div>
+            <TicketTable
+              tickets={myQueue.slice(0, 5)}
+              compact
+              emptyMessage="Nothing assigned to you right now. Pick up a ticket from the queue."
+            />
+          </div>
 
           <div className="panel">
             <div className="panel-header">

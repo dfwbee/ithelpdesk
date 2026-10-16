@@ -5,10 +5,12 @@ import "./forms.css";
 import "./tickets.css";
 import "./auth.css";
 import "./assets.css";
+import "./collab.css";
 import "./polish.css";
 import { AuthProvider } from "../components/AuthProvider";
 import { TicketsProvider } from "../components/TicketsProvider";
 import { AssetsProvider } from "../components/AssetsProvider";
+import { NotificationsProvider } from "../components/NotificationsProvider";
 import AppShell from "../components/AppShell";
 
 const inter = Inter({
@@ -18,9 +20,9 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Smart IT Helpdesk",
+  title: "Smart IT Helpdesk (Educational Prototype)",
   description:
-    "An IT helpdesk with proposed improvements.",
+    "An independent educational prototype of an IT helpdesk with proposed improvements.",
 };
 
 export default function RootLayout({ children }) {
@@ -30,9 +32,11 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <TicketsProvider>
             <AssetsProvider>
-              <Suspense fallback={null}>
-                <AppShell>{children}</AppShell>
-              </Suspense>
+              <NotificationsProvider>
+                <Suspense fallback={null}>
+                  <AppShell>{children}</AppShell>
+                </Suspense>
+              </NotificationsProvider>
             </AssetsProvider>
           </TicketsProvider>
         </AuthProvider>

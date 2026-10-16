@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTickets } from "./TicketsProvider";
-import { CATEGORIES, PRIORITIES } from "../lib/helpers";
+import { CATEGORIES, PRIORITIES, DEPARTMENTS } from "../lib/helpers";
 
 // requesterName pre-fills the Requester box. lockRequester stops it being edited
 // (used for regular users, who always report issues as themselves).
@@ -22,6 +22,7 @@ export default function TicketForm({
     category: "Software",
     priority: "Medium",
     requester: requesterName,
+    department: "",
     assetId: defaultAssetId,
   };
 
@@ -44,6 +45,9 @@ export default function TicketForm({
     }
     if (form.description.trim().length < 10) {
       found.description = "Describe the problem in at least 10 characters.";
+    }
+    if (!form.department) {
+      found.department = "Choose the department this is for.";
     }
     if (form.requester.trim().length < 2) {
       found.requester = "Enter the name of the person reporting the issue.";
@@ -137,6 +141,26 @@ export default function TicketForm({
               </option>
             ))}
           </select>
+        </div>
+
+        <div className="field field-full">
+          <label htmlFor="department">Department</label>
+          <select
+            id="department"
+            name="department"
+            value={form.department}
+            onChange={handleChange}
+          >
+            <option value="">Choose a department</option>
+            {DEPARTMENTS.map((d) => (
+              <option key={d} value={d}>
+                {d}
+              </option>
+            ))}
+          </select>
+          {errors.department && (
+            <span className="field-error">{errors.department}</span>
+          )}
         </div>
 
         {equipment.length > 0 && (

@@ -87,7 +87,22 @@ export default function TicketTable({
                   <span className={statusClass(t.status)}>{t.status}</span>
                 )}
               </td>
-              {!compact && <td data-label="Requester">{t.requester}</td>}
+              {!compact && (
+                <td data-label="Requester">
+                  {t.requester}
+                  {t.status !== "Resolved" && (
+                    <span
+                      className={
+                        "cell-sub" + (t.assignedTo ? "" : " cell-sub-warn")
+                      }
+                    >
+                      {t.assignedTo
+                        ? "Handled by " + t.assignedName
+                        : "Unassigned"}
+                    </span>
+                  )}
+                </td>
+              )}
               <td data-label="Created">{formatAge(t.createdAt)}</td>
             </tr>
           ))}

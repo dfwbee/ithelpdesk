@@ -13,6 +13,8 @@ const NETWORK_ERROR =
 function fromRow(row) {
   return {
     id: "TKT-" + row.ticket_number,
+    // The long internal ID, used to link comments, history and files to this ticket
+    uuid: row.id,
     number: row.ticket_number,
     title: row.title,
     description: row.description,
@@ -25,7 +27,38 @@ function fromRow(row) {
     resolvedAt: row.resolved_at,
     createdBy: row.created_by,
     assetId: row.asset_id || null,
+    department: row.department || "",
+    assignedTo: row.assigned_to || null,
+    assignedName: row.assigned_name || "",
+    assignedTitle: row.assigned_title || "",
   };
+}
+
+// The IT staff a ticket can be handed to (admins only; the database checks this too)
+async function fetchStaff() {
+  try {
+    let result = await supabase
+      .from("profiles")
+      .select("id, full_name, email, job_title")
+      .eq("role", "admin")
+      .order("full_name");
+    if (result.error) {
+      // Phase 8 SQL not run yet: fall back to the basics
+      result = await supabase
+        .from("profiles")
+        .select("id, full_name, email")
+        .eq("role", "admin")
+        .order("full_name");
+    }
+    if (result.error || !result.data) return [];
+    return result.data.map((p) => ({
+      id: p.id,
+      name: p.full_name || p.email || "IT staff",
+      title: p.job_title || "",
+    }));
+  } catch (err) {
+    return [];
+  }
 }
 
 // Asks Supabase for tickets. The database decides what you are allowed to see:
@@ -44,8 +77,9 @@ async function fetchTickets() {
 }
 
 export function TicketsProvider({ children }) {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const userId = user ? user.id : null;
+  const [staff, setStaff] = useState([]);
 
   // Remember which person these tickets were loaded for
   const [store, setStore] = useState({ userId: null, tickets: [], error: "" });
@@ -63,6 +97,18 @@ export function TicketsProvider({ children }) {
       active = false;
     };
   }, [userId]);
+
+  // Admins also load the list of IT staff, for the "Assigned to" box
+  useEffect(() => {
+    if (!supabase || !userId || !isAdmin) return;
+    let active = true;
+    fetchStaff().then((list) => {
+      if (active) setStaff(list);
+    });
+    return () => {
+      active = false;
+    };
+  }, [userId, isAdmin]);
 
   // Tickets only count as "ready" once they belong to the current person
   const ready = Boolean(userId) && store.userId === userId;
@@ -88,6 +134,7 @@ export function TicketsProvider({ children }) {
           priority: data.priority,
           requester_name: data.requester.trim(),
           asset_id: data.assetId || null,
+          department: data.department || "",
         })
         .select()
         .single();
@@ -120,6 +167,9 @@ export function TicketsProvider({ children }) {
     if ("assetId" in changes) {
       dbChanges.asset_id = changes.assetId || null;
     }
+    if ("assignedTo" in changes) {
+      dbChanges.assigned_to = changes.assignedTo || null;
+    }
     if ("resolutionNote" in changes) {
       dbChanges.resolution_note = changes.resolutionNote;
     }
@@ -150,6 +200,7 @@ export function TicketsProvider({ children }) {
 
   const value = {
     tickets,
+    staff: isAdmin ? staff : [],
     ready,
     loadError,
     refresh,

@@ -1,7 +1,7 @@
 "use client";
 
 import Icon from "./Icons";
-import { STATUSES, PRIORITIES, CATEGORIES } from "../lib/helpers";
+import { STATUSES, PRIORITIES, CATEGORIES, DEPARTMENTS } from "../lib/helpers";
 
 export default function TicketFilters({ filters, onChange, onClear }) {
   function update(name, value) {
@@ -9,7 +9,7 @@ export default function TicketFilters({ filters, onChange, onClear }) {
   }
 
   return (
-    <div className="filters">
+    <div className="filters filters-tickets">
       <div className="field filter-search">
         <label htmlFor="search">Search</label>
         <div className="search-box">
@@ -69,6 +69,36 @@ export default function TicketFilters({ filters, onChange, onClear }) {
               {c}
             </option>
           ))}
+        </select>
+      </div>
+
+      <div className="field">
+        <label htmlFor="filter-department">Department</label>
+        <select
+          id="filter-department"
+          value={filters.department}
+          onChange={(event) => update("department", event.target.value)}
+        >
+          <option value="All">All departments</option>
+          {DEPARTMENTS.map((d) => (
+            <option key={d} value={d}>
+              {d}
+            </option>
+          ))}
+          <option value="Unspecified">Unspecified</option>
+        </select>
+      </div>
+
+      <div className="field">
+        <label htmlFor="filter-assigned">Assigned</label>
+        <select
+          id="filter-assigned"
+          value={filters.assigned}
+          onChange={(event) => update("assigned", event.target.value)}
+        >
+          <option value="All">Anyone</option>
+          <option value="Mine">Assigned to me</option>
+          <option value="Unassigned">Unassigned</option>
         </select>
       </div>
 

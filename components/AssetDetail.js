@@ -7,6 +7,7 @@ import { useAssets } from "./AssetsProvider";
 import { useTickets } from "./TicketsProvider";
 import AdminOnly from "./AdminOnly";
 import TicketTable from "./TicketTable";
+import AssetQr from "./AssetQr";
 import Icon from "./Icons";
 import {
   DEPARTMENTS,
@@ -473,6 +474,7 @@ function DetailBody({ asset }) {
         </div>
 
         <div className="detail-side">
+          <AssetQr asset={asset} />
           <div className="panel">
             <h2 className="panel-title">Status</h2>
             <div className="field">

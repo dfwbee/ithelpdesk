@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "./AuthProvider";
 import Sidebar from "./Sidebar";
+import NotificationBell from "./NotificationBell";
 import { Backdrop, AuthAside } from "./Visuals";
 import { isSupabaseConfigured } from "../lib/supabase";
 
@@ -112,7 +113,12 @@ export default function AppShell({ children }) {
     <div className="app-shell">
       <Backdrop />
       <Sidebar />
-      <main className="main">{children}</main>
+      <main className="main">
+        <header className="page-bar">
+          <NotificationBell />
+        </header>
+        {children}
+      </main>
     </div>
   );
 }

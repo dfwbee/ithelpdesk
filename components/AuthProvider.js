@@ -33,6 +33,20 @@ export function AuthProvider({ children }) {
       } catch (error) {
         data = null;
       }
+
+      // The job title lives in a second, optional lookup. If the Phase 8 SQL has not
+      // been run yet this simply comes back empty and nothing else is affected.
+      let jobTitle = "";
+      try {
+        const titleResult = await supabase
+          .from("profiles")
+          .select("job_title")
+          .eq("id", user.id)
+          .maybeSingle();
+        jobTitle = (titleResult.data && titleResult.data.job_title) || "";
+      } catch (error) {
+        jobTitle = "";
+      }
       if (!active) return;
       setAuth({
         status: "signedIn",
@@ -41,6 +55,7 @@ export function AuthProvider({ children }) {
           fullName: (data && data.full_name) || "",
           // If the profile cannot be read, treat the person as a regular user
           role: (data && data.role) || "user",
+          jobTitle,
         },
       });
     }

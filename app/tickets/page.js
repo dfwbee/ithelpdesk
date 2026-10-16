@@ -13,12 +13,21 @@ import { emptyFilters, filterTickets, assetLabel } from "../../lib/helpers";
 
 function AdminTickets() {
   const { tickets, ready, loadError, refresh, updateTicket } = useTickets();
+  const { user } = useAuth();
   const { assets } = useAssets();
   // The dashboard's "New ticket" button links here with ?new=1 to open the form
   const params = useSearchParams();
   const [showForm, setShowForm] = useState(params.get("new") === "1");
   const [message, setMessage] = useState(null);
-  const [filters, setFilters] = useState(emptyFilters);
+  // The dashboard links here with ?assigned=mine or ?assigned=unassigned
+  const assignedParam = params.get("assigned");
+  const [filters, setFilters] = useState(
+    assignedParam === "mine"
+      ? { ...emptyFilters, assigned: "Mine" }
+      : assignedParam === "unassigned"
+        ? { ...emptyFilters, assigned: "Unassigned" }
+        : emptyFilters
+  );
   const [refreshing, setRefreshing] = useState(false);
 
   function handleCreated(ticket) {
@@ -50,7 +59,7 @@ function AdminTickets() {
   const newestFirst = [...tickets].sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
-  const visible = filterTickets(newestFirst, filters);
+  const visible = filterTickets(newestFirst, filters, user ? user.id : null);
   const filtersActive =
     JSON.stringify(filters) !== JSON.stringify(emptyFilters);
 

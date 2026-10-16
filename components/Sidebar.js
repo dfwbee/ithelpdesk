@@ -10,6 +10,7 @@ const adminLinks = [
   { href: "/", label: "Dashboard", icon: "dashboard" },
   { href: "/tickets", label: "Tickets", icon: "tickets" },
   { href: "/assets", label: "Equipment", icon: "laptop" },
+  { href: "/departments", label: "Departments", icon: "building" },
   { href: "/analytics", label: "Analytics", icon: "analytics" },
   { href: "/knowledge", label: "Knowledge Base", icon: "book" },
 ];
@@ -95,7 +96,7 @@ export default function Sidebar() {
             <LogoMark />
             <div className="brand-text">
               <span className="brand-name">Smart IT Helpdesk</span>
-
+              <span className="brand-sub">Educational prototype</span>
             </div>
           </div>
           <button
@@ -138,7 +139,9 @@ export default function Sidebar() {
             <div className="sidebar-user-text">
               <span className="sidebar-user-name">{displayName}</span>
               <span className="sidebar-user-role">
-                {isAdmin ? "Administrator" : "User"}
+                {isAdmin
+                  ? (profile && profile.jobTitle) || "Administrator"
+                  : "User"}
               </span>
             </div>
           </div>

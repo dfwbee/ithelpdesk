@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useTickets } from "./TicketsProvider";
 import { useAuth } from "./AuthProvider";
 import { useAssets } from "./AssetsProvider";
+import TicketThread from "./TicketThread";
+import TicketAttachments from "./TicketAttachments";
 import {
   STATUSES,
   isOverdue,
@@ -12,6 +14,8 @@ import {
   formatDateTime,
   slaLabel,
   assetLabel,
+  staffLabel,
+  departmentName,
   statusClass,
   priorityClass,
 } from "../lib/helpers";
@@ -19,8 +23,8 @@ import {
 // Shown only once the ticket has been found, so the note box can start
 // with the saved note without any extra effects.
 function DetailBody({ ticket }) {
-  const { updateTicket } = useTickets();
-  const { isAdmin } = useAuth();
+  const { updateTicket, staff } = useTickets();
+  const { isAdmin, user } = useAuth();
   const { assets, assetById } = useAssets();
   const asset = ticket.assetId ? assetById(ticket.assetId) : null;
   const [note, setNote] = useState(ticket.resolutionNote || "");
@@ -44,6 +48,19 @@ function DetailBody({ ticket }) {
     const result = await updateTicket(ticket.id, { status });
     setBusy(false);
     showResult(result, "Status changed to " + status + ".");
+  }
+
+  async function assignTo(staffId) {
+    setBusy(true);
+    const result = await updateTicket(ticket.id, { assignedTo: staffId });
+    setBusy(false);
+    const person = staff.find((s) => s.id === staffId);
+    showResult(
+      result,
+      staffId
+        ? "Assigned to " + (person ? person.name : "that person") + "."
+        : "Ticket is now unassigned."
+    );
   }
 
   async function handleAssetChange(event) {
@@ -139,9 +156,44 @@ function DetailBody({ ticket }) {
               </p>
             )}
           </div>
+
+          <TicketAttachments ticket={ticket} />
+          <TicketThread ticket={ticket} />
         </div>
 
         <div className="detail-side">
+          {isAdmin && (
+            <div className="panel">
+              <h2 className="panel-title">Assigned to</h2>
+              <div className="field">
+                <label htmlFor="detail-assignee">Technician or engineer</label>
+                <select
+                  id="detail-assignee"
+                  value={ticket.assignedTo || ""}
+                  onChange={(event) => assignTo(event.target.value)}
+                  disabled={busy}
+                >
+                  <option value="">Unassigned</option>
+                  {staff.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {staffLabel(s.name, s.title)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {user && ticket.assignedTo !== user.id && (
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-block"
+                  onClick={() => assignTo(user.id)}
+                  disabled={busy}
+                >
+                  Assign to me
+                </button>
+              )}
+            </div>
+          )}
+
           {isAdmin && (
             <div className="panel">
               <h2 className="panel-title">Status</h2>
@@ -190,8 +242,16 @@ function DetailBody({ ticket }) {
             <dl className="meta-list">
               <dt>Requester</dt>
               <dd>{ticket.requester}</dd>
+              <dt>Department</dt>
+              <dd>{departmentName(ticket.department)}</dd>
               <dt>Category</dt>
               <dd>{ticket.category}</dd>
+              <dt>Assigned to</dt>
+              <dd>
+                {ticket.assignedTo
+                  ? staffLabel(ticket.assignedName, ticket.assignedTitle)
+                  : "Not assigned yet"}
+              </dd>
               <dt>Equipment</dt>
               <dd>
                 {asset ? (
