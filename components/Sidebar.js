@@ -96,7 +96,7 @@ export default function Sidebar() {
             <LogoMark />
             <div className="brand-text">
               <span className="brand-name">Smart IT Helpdesk</span>
-              <span className="brand-sub">Educational prototype</span>
+              
             </div>
           </div>
           <button

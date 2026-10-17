@@ -1,4 +1,4 @@
-// Fictional sample data for the educational prototype.
+
 const hoursAgo = (h) => new Date(Date.now() - h * 60 * 60 * 1000).toISOString();
 
 export const sampleTickets = [

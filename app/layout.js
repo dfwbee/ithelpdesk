@@ -20,9 +20,9 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: "Smart IT Helpdesk (Educational Prototype)",
+  title: "Smart IT Helpdesk",
   description:
-    "An independent educational prototype of an IT helpdesk with proposed improvements.",
+    "An IT helpdesk with proposed improvements.",
 };
 
 export default function RootLayout({ children }) {
